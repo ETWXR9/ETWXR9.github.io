@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Starbound mod 武器制作教程（三） | etwxr9&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+  
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+  <div id="wrapper">
+    <header id="header">
+  <h1 id="title">
+    <a href="/">etwxr9&#39;s blog</a>
+  </h1>
+  <nav>
+    
+    
+      
+      <a class="nav-link" href="/">Home</a>
+    
+      
+        <span class="nav-spacer">×</span>
+      
+      <a class="nav-link" href="/archives">Archives</a>
+    
+    
+  </nav>
+</header>
+
+    <div id="content">
+      <article id="post-Starbound-mod-武器制作教程（三）" class="article article-type-post" itemprop="blogPost" itemscope>
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 class="article-title" itemprop="headline name">
+      Starbound mod 武器制作教程（三）
+    </h2>
+  
+
+
+        <div class="article-meta">
+          <time class="article-date" datetime="2019-02-28T16:36:28.000Z" itemprop="datePublished">三月 1, 2019, 12:36 凌晨</time>
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        <p>前两篇对文件结构做了很简陋的解释，我觉得有必要通过做一个武器出来来熟悉一下。</p>
+<p>准备以阳伞（parasol）为外形，制作一个主功能为大剑连斩，副功能为射击，shift则可以张开减缓下落速度的武器。</p>
+<a id="more"></a>
+<p>这个武器的难点在于一是使用了非武器作为外形，需要重置animation文件，二是使用了原版近战没有的功能：射击，因此需要修改animation文件，可能还需要为近战武器写一个射击的weaponability，我感觉可能没这么麻烦，到时候再看吧。</p>
+<p>mod制作的前期工作，目录创建等工作在第一部教程里已经说过了，在此不赘述。</p>
+<p>总之先把parasol的animation文件拿过来，和随便一个大剑的animation作比较，就能发现我们需要一个swoosh的状态类和相应的状态，于是复制之，还需要对应的swoosh的part和partstate，复制之。由于该武器不需要系统分配image，我们就把swoosh的image写完整，确定好是哪一套swoosh素材。</p>
+<p>然后使用altfire作为副功能，altfire是gunfire的子脚本，gunfire则是大多数枪使用的功能，我们随便找一个，比如gun.animation就可以，复制其中的状态机 firing 进去，以及parts：muzzleflash进去。</p>
+<p>剩下的诸如 sounds particleEmitters transformationGroups rotationGroups 等，只要综合下gun和broadsword的aniamtion文件即可，两者基本没有重名的，除了sound的fire名字一样，这个问题之后再解决。</p>
+<p>最后效果是这样的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;globalTagDefaults&quot; : &#123;</span><br><span class="line">    &quot;paletteSwaps&quot; : &quot;&quot;</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">  &quot;animatedParts&quot; : &#123;</span><br><span class="line">    &quot;stateTypes&quot; : &#123;</span><br><span class="line">      &quot;swoosh&quot; : &#123;</span><br><span class="line">        &quot;default&quot; : &quot;idle&quot;,</span><br><span class="line">        &quot;states&quot; : &#123;</span><br><span class="line">          &quot;idle&quot; : &#123;</span><br><span class="line">          &#125;,</span><br><span class="line">          &quot;fire&quot; : &#123;</span><br><span class="line">            &quot;frames&quot; : 3,</span><br><span class="line">            &quot;cycle&quot; : 0.1,</span><br><span class="line">            &quot;mode&quot; : &quot;transition&quot;,</span><br><span class="line">            &quot;transition&quot; : &quot;idle&quot;</span><br><span class="line">          &#125;,</span><br><span class="line">          &quot;fire2&quot; : &#123;</span><br><span class="line">            &quot;frames&quot; : 3,</span><br><span class="line">            &quot;cycle&quot; : 0.1,</span><br><span class="line">            &quot;mode&quot; : &quot;transition&quot;,</span><br><span class="line">            &quot;transition&quot; : &quot;idle&quot;</span><br><span class="line">          &#125;,</span><br><span class="line">          &quot;fire3&quot; : &#123;</span><br><span class="line">            &quot;frames&quot; : 3,</span><br><span class="line">            &quot;cycle&quot; : 0.1,</span><br><span class="line">            &quot;mode&quot; : &quot;transition&quot;,</span><br><span class="line">            &quot;transition&quot; : &quot;idle&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;parasol&quot; : &#123;</span><br><span class="line">        &quot;default&quot; : &quot;closed&quot;,</span><br><span class="line">        &quot;states&quot; : &#123;</span><br><span class="line">          &quot;closed&quot; : &#123;&#125;,</span><br><span class="line">          &quot;open&quot; : &#123;</span><br><span class="line">            &quot;frames&quot; : 2,</span><br><span class="line">            &quot;cycle&quot; : 0.2,</span><br><span class="line">            &quot;mode&quot; : &quot;end&quot;</span><br><span class="line">          &#125;,</span><br><span class="line">          &quot;close&quot; : &#123;</span><br><span class="line">            &quot;frames&quot; : 2,</span><br><span class="line">            &quot;cycle&quot; : 0.2,</span><br><span class="line">            &quot;mode&quot; : &quot;end&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;firing&quot; : &#123;</span><br><span class="line">        &quot;default&quot; : &quot;off&quot;,</span><br><span class="line">        &quot;states&quot; : &#123;</span><br><span class="line">          &quot;off&quot; : &#123;&#125;,</span><br><span class="line">          &quot;fire&quot; : &#123;</span><br><span class="line">            &quot;frames&quot; : 2,</span><br><span class="line">            &quot;cycle&quot; : 0.07,</span><br><span class="line">            &quot;mode&quot; : &quot;transition&quot;,</span><br><span class="line">            &quot;transition&quot; : &quot;off&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line"></span><br><span class="line">    &quot;parts&quot; : &#123;</span><br><span class="line">      &quot;parasol&quot; : &#123;</span><br><span class="line">        &quot;properties&quot; : &#123;</span><br><span class="line">          &quot;zLevel&quot; : -1,</span><br><span class="line">          &quot;centered&quot; : true,</span><br><span class="line">          &quot;offset&quot; : [0, 1.375],</span><br><span class="line">          &quot;transformationGroups&quot; : [&quot;weapon&quot;],</span><br><span class="line">          &quot;rotationCenter&quot; : [0, 0],</span><br><span class="line">          &quot;damageArea&quot; : [ [-0.7, -1.0], [-0.7, 2.5], [0.5, 2.5], [0.5, -1.0] ]</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;partStates&quot; : &#123;</span><br><span class="line">          &quot;parasol&quot; : &#123;</span><br><span class="line">            &quot;closed&quot; : &#123;</span><br><span class="line">              &quot;properties&quot; : &#123;</span><br><span class="line">                &quot;image&quot; : &quot;parasol.png:close.2&quot;</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;open&quot; : &#123;</span><br><span class="line">              &quot;properties&quot; : &#123;</span><br><span class="line">                &quot;image&quot; : &quot;parasol.png:open.&quot;</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;close&quot; : &#123;</span><br><span class="line">              &quot;properties&quot; : &#123;</span><br><span class="line">                &quot;image&quot; : &quot;parasol.png:close.&quot;</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,     </span><br><span class="line">     &quot;swoosh&quot; : &#123;</span><br><span class="line">        &quot;properties&quot; : &#123;</span><br><span class="line">          &quot;zLevel&quot; : -1,</span><br><span class="line">          &quot;centered&quot; : true,</span><br><span class="line">          &quot;offset&quot; : [-0.25, 2.5],</span><br><span class="line">          &quot;transformationGroups&quot; : [&quot;swoosh&quot;],</span><br><span class="line">          &quot;rotationCenter&quot; : [0, 0]</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;partStates&quot; : &#123;</span><br><span class="line">          &quot;swoosh&quot; : &#123;</span><br><span class="line">            &quot;idle&quot; : &#123;</span><br><span class="line">              &quot;properties&quot; : &#123;</span><br><span class="line">                &quot;image&quot; : &quot;&quot;</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;fire&quot; : &#123;</span><br><span class="line">              &quot;properties&quot; : &#123;</span><br><span class="line">                &quot;image&quot; : &quot;&#x2F;items&#x2F;active&#x2F;weapons&#x2F;melee&#x2F;broadsword&#x2F;swoosh&#x2F;energyswoosh.png:&quot;,</span><br><span class="line">                &quot;damageArea&quot; : [[-5, 2], [-2.5, 3], [1, 3], [4, 1.75], [5, -0.25], [5, -2.25], [4, -3.25], [0, -2.5]]</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;fire2&quot; : &#123;</span><br><span class="line">              &quot;properties&quot; : &#123;</span><br><span class="line">                &quot;image&quot; : &quot;&#x2F;items&#x2F;active&#x2F;weapons&#x2F;melee&#x2F;broadsword&#x2F;swoosh2&#x2F;energyswoosh.png:&quot;,</span><br><span class="line">                &quot;offset&quot; : [5.0, 1.0],</span><br><span class="line">                &quot;damageArea&quot; : [[-4, 1], [2.5, 1], [2.5, -2], [-4, -2]]</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;fire3&quot; : &#123;</span><br><span class="line">              &quot;properties&quot; : &#123;</span><br><span class="line">                &quot;image&quot; : &quot;&#x2F;items&#x2F;active&#x2F;weapons&#x2F;melee&#x2F;broadsword&#x2F;swoosh3&#x2F;energyswoosh.png:&quot;,</span><br><span class="line">                &quot;offset&quot; : [3.5, 0],</span><br><span class="line">                &quot;damageArea&quot; : [[-4.75, 1.5], [3, 1], [3, -1], [-4.75, -1.5]]</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &quot;muzzleFlash&quot; : &#123;</span><br><span class="line">        &quot;properties&quot; : &#123;</span><br><span class="line">          &quot;zLevel&quot; : -1,</span><br><span class="line">          &quot;centered&quot; : true,</span><br><span class="line">          &quot;offset&quot; : [0.75, 0],</span><br><span class="line">          &quot;fullbright&quot; : true,</span><br><span class="line">          &quot;transformationGroups&quot; : [&quot;muzzle&quot;]</span><br><span class="line">        &#125;,</span><br><span class="line"></span><br><span class="line">        &quot;partStates&quot; : &#123;</span><br><span class="line">          &quot;firing&quot; : &#123;</span><br><span class="line">            &quot;fire&quot; : &#123;</span><br><span class="line">              &quot;properties&quot; : &#123;</span><br><span class="line">                &quot;image&quot; : &quot;&#x2F;items&#x2F;active&#x2F;weapons&#x2F;ranged&#x2F;unrand&#x2F;spaceplasmarifle&#x2F;muzzleflash.png:&quot;</span><br><span class="line">              &#125;</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;         </span><br><span class="line">    &#125;, </span><br><span class="line">    &quot;rotationGroups&quot; : &#123;</span><br><span class="line">      &quot;weapon&quot; : &#123;</span><br><span class="line">        &quot;angularVelocity&quot; : 0</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">  </span><br><span class="line">    &quot;transformationGroups&quot; : &#123;</span><br><span class="line">      &quot;weapon&quot; : &#123;&#125;,</span><br><span class="line">      &quot;muzzle&quot; : &#123;&#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;particleEmitters&quot; : &#123;</span><br><span class="line">      &quot;physicalswoosh&quot; : &#123;</span><br><span class="line">        &quot;active&quot; : false,</span><br><span class="line">        &quot;transformationGroups&quot; : [&quot;swoosh&quot;],</span><br><span class="line">        &quot;burstCount&quot; : 4,</span><br><span class="line">        &quot;particles&quot; : [</span><br><span class="line">          &#123; &quot;particle&quot; : &quot;energyblade&quot;&#125;,</span><br><span class="line">          &#123; &quot;particle&quot; : &quot;energyblade2&quot;&#125;</span><br><span class="line">        ]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">  &quot;sounds&quot; : &#123;</span><br><span class="line">    &quot;open&quot; : [ ],</span><br><span class="line">    &quot;fire&quot; : [ ],</span><br><span class="line">    &quot;fire2&quot; : [ ],</span><br><span class="line">    &quot;fire3&quot; : [ ]</span><br><span class="line">    </span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>后面部分我自己做完了，但是发现过于复杂，很多地方排错都很难解释清楚，写图文教程没有意义。我又没有条件做视频，所以咕咕咕。</p>
+<p>编辑：qq删了，很久没碰过这游戏的MOD了，加我也没法给什么指导，建议直接去starbound的官方论坛搜索问题。</p>
+
+      
+    </div>
+    
+    
+    <div class="article-category">
+      
+      
+      
+        <b>Tags:</b>
+        <a class="article-tag-none-link" href="/tags/%E6%9C%AA%E5%88%86%E7%B1%BB/" rel="tag">未分类</a>
+      
+    </div>
+    
+    
+  </div>
+</article>
+
+  
+<nav id="article-nav" class="article-nav">
+  
+    <a href="/2019/05/17/%E4%BB%8Emc%E5%92%8Chytale%E7%AD%89%E7%9C%8B%E5%A4%9A%E4%BA%BA%E6%B2%99%E7%9B%92%E6%B8%B8%E6%88%8F%E8%AE%BE%E8%AE%A1%E5%8F%96%E8%88%8D-1/" id="article-nav-newer" class="article-nav-link-wrap newer">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          从mc和hytale等看多人沙盒游戏设计取舍
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/02/27/Starbound-mod-%E6%AD%A6%E5%99%A8%E5%88%B6%E4%BD%9C%E6%95%99%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89/" id="article-nav-older" class="article-nav-link-wrap older">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Starbound mod 武器制作教程（二）
+        
+      </div>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+    </div>
+  </div>
+  
+
+
+
+
+
+
+
+</body>
+</html>

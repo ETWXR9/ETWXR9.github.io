@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Starbound mod制作教程（一） 简介和准备 | etwxr9&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+  
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+  <div id="wrapper">
+    <header id="header">
+  <h1 id="title">
+    <a href="/">etwxr9&#39;s blog</a>
+  </h1>
+  <nav>
+    
+    
+      
+      <a class="nav-link" href="/">Home</a>
+    
+      
+        <span class="nav-spacer">×</span>
+      
+      <a class="nav-link" href="/archives">Archives</a>
+    
+    
+  </nav>
+</header>
+
+    <div id="content">
+      <article id="post-Starbound-mod制作教程（一）-简介和准备" class="article article-type-post" itemprop="blogPost" itemscope>
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 class="article-title" itemprop="headline name">
+      Starbound mod制作教程（一） 简介和准备
+    </h2>
+  
+
+
+        <div class="article-meta">
+          <time class="article-date" datetime="2019-02-17T17:18:10.000Z" itemprop="datePublished">二月 18, 2019, 1:18 凌晨</time>
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        <p>有关屎大棒modding的中文教程和相关资料很少，本教程作者也是个菜鸡，是一边摸索一边写的。如果想做好mod，光看我写的绝对不够，因此做好阅读大量英文的准备。下面列出建议参考查阅的一些网站。</p>
+<a id="more"></a>
+<p><a href="https://community.playstarbound.com/forums/starbound-modding.111/">呵呵鱼社区的屎大棒modding板块</a>，可以在里面找到modding的基础入门指引，而且善用搜索栏可以搜索各种奇奇怪怪的问题。<br><a href="https://starbounder.org/Modding:Portal">屎大棒官方wiki的modding页面</a>，也提供了入门指导。更重要的是，官方wiki里有很全面的lua的API函数介绍，数据类型的介绍，JSON结构的介绍，基本上看到什么不懂的函数或者变量，都可以到这里搜一搜。<br><a href="https://frackinuniverse.fandom.com/wiki/FrackinUniverse_Wiki">FU的FANDOMwiki</a>，因为我打算在FU的基础上modding，所以自然也要参考FU的东西，尽管关于FUmod文件的介绍几乎没多少。如果你不打算搞FU基础上的modding，那没必要接触FU的东西，但是FU多好玩啊）<br>然后就是谷歌了，有时候谷歌搜索起来比在官方wiki搜还精准）</p>
+<p>那么接下来说下modding的准备工作。你需要这些东西</p>
+<ul>
+<li>starbound的游戏文件，只要你买了就有，从steam中右键属性找游戏目录就行，基本上都是 <em>你的steam目录\steamapps\common\Starbound</em> 这样的。modding可以直接在这个目录里进行，不用备份，只要不拿着重要人物存档作死就行）</li>
+<li>解包工具，请参照<a href="https://community.playstarbound.com/threads/how-to-successfully-pack-and-unpack-pak-files.66649/">这里的教程</a>或者百度找中文的教程去解包assets文件夹里的<br>packed.pak文件，modding就是对其中的内容进行添加和修改。</li>
+<li>编辑器，用来编辑JSON和lua，也就是modding的核心工作。<a href="https://notepad-plus-plus.org/download/">notepad++</a>就可以，我用的是<a href="https://code.visualstudio.com/Download">vscode</a>，有教程推荐<a href="https://atom.io/">atom</a>，全都是免费而且下载安装很简单，也没什么好选的，随便一款都行。</li>
+<li>像素画工具，网上有一堆在线像素画工具，然而在线的显然用起来不爽，steam上有一些工具如<a href="https://store.steampowered.com/app/431730/Aseprite/">aseprite</a>很好用。这里我用的PS，其实我并不会用而且很复杂，但好处是教程多，总之现学现卖啦）</li>
+</ul>
+<p>解包步骤除了上面那些教程说的，还可以用modunpackhelp一键解包。大概是这样的：下载<a href="https://uc49011c6c22b1c411c38b4bc9b5.dl.dropboxusercontent.com/cd/0/get/AbjZ-gKpp2NpJSvtcSHmdsfDISO47SURTqf5d6TsOl2WLguxK-DxWJMPu1LlmHfRNSBgZhoAGKwenk-Ex_h9_PoaEoWmILB9YNxjj88w7rfc9_F-BVsgIRcUxbbG0Q0nZbc/file?_download_id=8684674072638996676450569019001954643273009246526592235034514919&_notify_domain=www.dropbox.com&dl=1">modunpackhelper</a>，放进游戏目录的mods文件夹下面，运行，之后你就会在assets文件夹里面发现_unpacked文件夹了。然后可以进去先转转，了解下文件夹分类和结构，用编辑器打开一些文件看看里面的结构啥的，不过反正大概看不懂就是了。</p>
+<p>基础的modding其实就是以原版游戏的数据为基础稍作修改，如果你对某些物品感兴趣，可以使用系统自带的搜索ctrl+F等来搜索这个物品数据所在位置，不过注意物品名字和游戏中呈现出的名字并不相同，比如“物质枪模块”这个物品在游戏中的名字是 Manipulator Module，然而这只是该物品的“shortdescription ”属性，用于在游戏中展示的。其assets中的实际名称是manipulatormodule<br>此外，为了快速搜索文件，建议使用<a href="https://www.voidtools.com/zh-cn/downloads/">everything</a>这个搜索软件。</p>
+<p>准备好编辑器，画画工具，解包完成后，准备工作就结束了，下一个教程将尝试制作一个非常简单的mod来熟悉mod文件的结构。</p>
+
+      
+    </div>
+    
+    
+    <div class="article-category">
+      
+      
+      
+        <b>Tags:</b>
+        <a class="article-tag-none-link" href="/tags/Starbound-mod%E5%88%B6%E4%BD%9C%E6%95%99%E7%A8%8B/" rel="tag">Starbound mod制作教程</a>, <a class="article-tag-none-link" href="/tags/%E6%97%A5%E5%BF%97/" rel="tag">日志</a>
+      
+    </div>
+    
+    
+  </div>
+</article>
+
+  
+<nav id="article-nav" class="article-nav">
+  
+    <a href="/2019/02/18/Starbound-mod%E5%88%B6%E4%BD%9C%E6%95%99%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89-mod%E9%95%BF%E4%BB%80%E4%B9%88%E6%A0%B7/" id="article-nav-newer" class="article-nav-link-wrap newer">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Starbound mod制作教程（二） mod长什么样
+        
+      </div>
+    </a>
+  
+  
+    <span id="article-nav-older" class="article-nav-link-wrap older"></span>
+  
+</nav>
+
+
+
+
+
+
+    </div>
+  </div>
+  
+
+
+
+
+
+
+
+</body>
+</html>

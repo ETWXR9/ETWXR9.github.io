@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Starbound mod 武器制作教程（二） | etwxr9&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+  
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+  <div id="wrapper">
+    <header id="header">
+  <h1 id="title">
+    <a href="/">etwxr9&#39;s blog</a>
+  </h1>
+  <nav>
+    
+    
+      
+      <a class="nav-link" href="/">Home</a>
+    
+      
+        <span class="nav-spacer">×</span>
+      
+      <a class="nav-link" href="/archives">Archives</a>
+    
+    
+  </nav>
+</header>
+
+    <div id="content">
+      <article id="post-Starbound-mod-武器制作教程（二）" class="article article-type-post" itemprop="blogPost" itemscope>
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 class="article-title" itemprop="headline name">
+      Starbound mod 武器制作教程（二）
+    </h2>
+  
+
+
+        <div class="article-meta">
+          <time class="article-date" datetime="2019-02-27T12:15:06.000Z" itemprop="datePublished">二月 27, 2019, 8:15 晚上</time>
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        <p>接下来我们来看energymeleeweapon.lua<br>应该能解决不少上篇在看animation的时候留下的问题</p>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">require &quot;&#x2F;scripts&#x2F;util.lua&quot;</span><br><span class="line">require &quot;&#x2F;scripts&#x2F;vec2.lua&quot;</span><br><span class="line">require &quot;&#x2F;items&#x2F;active&#x2F;weapons&#x2F;weapon.lua&quot;</span><br><span class="line"></span><br><span class="line">function init()</span><br><span class="line">  animator.setGlobalTag(&quot;paletteSwaps&quot;, config.getParameter(&quot;paletteSwaps&quot;, &quot;&quot;))</span><br><span class="line">  animator.setGlobalTag(&quot;directives&quot;, &quot;&quot;)</span><br><span class="line">  animator.setGlobalTag(&quot;bladeDirectives&quot;, &quot;&quot;)</span><br><span class="line"></span><br><span class="line">  self.weapon &#x3D; Weapon:new()</span><br><span class="line"></span><br><span class="line">  self.weapon:addTransformationGroup(&quot;weapon&quot;, &#123;0,0&#125;, util.toRadians(config.getParameter(&quot;baseWeaponRotation&quot;, 0)))</span><br><span class="line">  self.weapon:addTransformationGroup(&quot;swoosh&quot;, &#123;0,0&#125;, math.pi&#x2F;2)</span><br><span class="line"></span><br><span class="line">  local primaryAbility &#x3D; getPrimaryAbility()</span><br><span class="line">  self.weapon:addAbility(primaryAbility)</span><br><span class="line"></span><br><span class="line">  local secondaryAttack &#x3D; getAltAbility()</span><br><span class="line">  if secondaryAttack then</span><br><span class="line">    self.weapon:addAbility(secondaryAttack)</span><br><span class="line">  end</span><br><span class="line"></span><br><span class="line">  self.weapon:init()</span><br><span class="line"></span><br><span class="line">  self.activeTime &#x3D; config.getParameter(&quot;activeTime&quot;, 2.0)</span><br><span class="line">  self.activeTimer &#x3D; 0</span><br><span class="line">  animator.setAnimationState(&quot;blade&quot;, &quot;inactive&quot;)</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">function update(dt, fireMode, shiftHeld)</span><br><span class="line">  self.weapon:update(dt, fireMode, shiftHeld)</span><br><span class="line"></span><br><span class="line">  local nowActive &#x3D; self.weapon.currentAbility ~&#x3D; nil</span><br><span class="line">  if nowActive then</span><br><span class="line">    if self.activeTimer &#x3D;&#x3D; 0 then</span><br><span class="line">      animator.setAnimationState(&quot;blade&quot;, &quot;extend&quot;)</span><br><span class="line">    end</span><br><span class="line">    self.activeTimer &#x3D; self.activeTime</span><br><span class="line">  elseif self.activeTimer &gt; 0 then</span><br><span class="line">    self.activeTimer &#x3D; math.max(0, self.activeTimer - dt)</span><br><span class="line">    if self.activeTimer &#x3D;&#x3D; 0 then</span><br><span class="line">      animator.setAnimationState(&quot;blade&quot;, &quot;retract&quot;)</span><br><span class="line">    end</span><br><span class="line">  end</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">function uninit()</span><br><span class="line">  self.weapon:uninit()</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<p>比如init()一开始就发现了那几个没找到的GlobalTag 出处。而且我们可以发现这三个都是空的）<br>虽然不知道为啥是空的，但是管它呢，反正没用了。</p>
+<p>self.weapon = Weapon:new() 这个new是weapon.lua的函数，注意到lua脚本文件的最上方往往都有引用的脚本名称，本脚本引用了util.lua vec2.lua weapon.lua 这三个脚本<br>这些脚本我们不会去细看，如果有需要理解的地方，我们就翻出来单独看某个函数就行。</p>
+<p>那么这个new是什么，翻出来找定义。  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">function Weapon:new(weaponConfig)</span><br><span class="line">  local newWeapon &#x3D; weaponConfig or &#123;&#125;</span><br><span class="line">  newWeapon.damageLevelMultiplier &#x3D; config.getParameter(&quot;damageLevelMultiplier&quot;, root.evalFunction(&quot;weaponDamageLevelMultiplier&quot;, config.getParameter(&quot;level&quot;, 1)))</span><br><span class="line">  newWeapon.elementalType &#x3D; config.getParameter(&quot;elementalType&quot;)</span><br><span class="line">  newWeapon.muzzleOffset &#x3D; config.getParameter(&quot;muzzleOffset&quot;) or &#123;0,0&#125;</span><br><span class="line">  newWeapon.aimOffset &#x3D; config.getParameter(&quot;aimOffset&quot;) or (newWeapon.muzzleOffset[2] - 0.25) -- why is it off by 0.25? nobody knows!</span><br><span class="line">  newWeapon.abilities &#x3D; &#123;&#125;</span><br><span class="line">  newWeapon.transformationGroups &#x3D; &#123;&#125;</span><br><span class="line">  newWeapon.handGrip &#x3D; config.getParameter(&quot;handGrip&quot;, &quot;inside&quot;)</span><br><span class="line">  setmetatable(newWeapon, extend(self))</span><br><span class="line">  return newWeapon</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<p>一般来说，lua的名字为new的函数，都是用来继承的，也就是新模块调用这个new函数就可以把定义new函数的模块的内容继承过去。这个过程是通过setmetatable这个函数来完成的，不懂就查百度谷歌，懒得查就别管了。</p>
+<p>总之我们可以看到这个函数返回的newWeapon里面基本上也就是定义了一些奇奇怪怪的变量，懒得管了，你看注释里都写了nobody knows!，可见是玄学代码，动了就会炸。总之我们至少知道了这个new函数是在做什么，因此我们pass，到时候发现了脚本使用self.weapon的时候再回来找对应变量吧。</p>
+<p>行吧下一句就是，或者说，到处都是，这说明这个lua脚本基本上可以当成是一个小weapon.lua)  </p>
+<p>self.weapon:addTransformationGroup<br>这个函数当然也是继承来的，我们去weapon.lua里找定义。  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function Weapon:addTransformationGroup(name, offset, rotation, rotationCenter)</span><br><span class="line">  self.transformationGroups &#x3D; self.transformationGroups or &#123;&#125;</span><br><span class="line">  table.insert(self.transformationGroups, &#123;name &#x3D; name, offset &#x3D; offset, rotation &#x3D; rotation, rotationCenter &#x3D; rotationCenter&#125;)</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<p>table.insert就是往table里插入内容，而transformationGroup上一篇里应该是介绍过了。这里不赘述。整个函数的意思也就是创建一个transformationGroup变量，然后往里面塞入传入的参数（name offset rotation rotationCenter）。</p>
+<p>注意到第一句 addTransformationGroup 的参数里，rotation的对应参数是<br>util.toRadians(config.getParameter(“baseWeaponRotation”, 0))<br>那我们去util.lua里找找这个函数，哦好吧就是简单的角度单位转换，要是不知道你可能得复习下中学数学）</p>
+<p>接下来定义了个 local primaryAbility = getPrimaryAbility()<br><strong>getPrimaryAbility 是上面引用的weapon.lua里的 WeaponAbility 模块里的函数，具体功能是返回配置文件（即activeitem）里指定的primaryability对应的lua脚本，这里指的是meleecombo.lua 由于weapon.lua里有两个模块，一个是Weapon，一个是WeaponAbility，比较容易混乱，所以特此加粗注意。</strong><br>下一行又把primaryability当参数传到 self.weapon:addAbility 里了，我们来看看这个函数。  </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">function Weapon:addAbility(newAbility)</span><br><span class="line">  newAbility.weapon &#x3D; self</span><br><span class="line">  table.insert(self.abilities, newAbility)</span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<p>把Weapon这个模块自己传入了primaryability里面，没看懂。<br>然后把primaryability 插入了self.abilities 里面，这个<br>self.abilities 在new里定义了，顾名思义应当是保存武器功能配置的，那么总结这个函数的功能就是把传入的配置加入一个weapon表，然后塞入self.abilities里。<br>同时在update里也可以看到是在对abilities里的数值进行更新的，不过基本上就没有其他地方提及abilites了，大部分相关功能可能都是在abilities里指明的lua文件实现的。</p>
+<p>primary之后是 secondaryAttack ，和上面一样，不说了</p>
+<p>然后调用了weapon的init，其中包含一个for循环，给每个ability都调用了它的init函数。</p>
+<p>然后set了动画状态，我们上一篇已经看过animation文件了</p>
+<p>接下来是update函数</p>
+<p>self.weapon:update ，这个函数内容是更新后面的参数，再加上调用abilities的update函数。我们来看下meleecombo.lua，发现这个东西继承了 WeaponAbility这个模块，而 WeaponAbility 这个模块和Weapon一样写在了weapon.lua里，注意一个lua文件不一定只对应一个模块。<br>而且meleecombo里面确实有一个self.weapon，对应了上面Weapon:addAbility里的操作。  </p>
+<p>我们继续看abilities的update函数，首先调用了父级即WeaponAbility 的update，这个函数的功能只有更新三个参数而已。<br>接下来是计时器更新，然后切换状态。<br>readyFlash 这个函数在下面有定义，并且我们发现了那个一直失踪的tag：bladeDirectives ，在该函数中，将 bladeDirectives 通过 animator.setGlobalTag 函数设置为了 self.flashDirectives ，然而我只在broadswordcombo.weaponability这个JSON文件中找到了flashDirectives，虽然不清楚JSON文件里的键值对是怎么加载到lua里面的，但是管它的，我们看到JSON里的<br>flashDirectives 的值是 “fade=FFFFFFFF=0.15” ，这玩意我查了一下，应该是<a href="https://starbounder.org/Modding:Image_Processing_Directives">这个</a>Image Processing Directives，在wiki页面有介绍，fade=某个颜色=某个值就是在说让一个图片逐渐向某一颜色转变，后面的值是转变的程度<br>到此，结合上一篇我们遇到<bladeDirectives>的位置，大家应该就清楚这个东西发挥了什么作用了吧，也就是给剑刃特效变颜色用的，不过我倒是在游戏里没注意到这个细节。<br>之后的内容大家自己理解，理解不了就pass</p>
+<p>这个ability的lua脚本后面就都是状态的逻辑了，每种状态前面都加了简短的介绍，总之pass。暂时没必要深究。</p>
+<p>ok还记得我们到哪了么，我刚介绍完了energymeleeweapon.lua的update函数的第一句。我们继续往下看。<br>接下来的逻辑是如果该武器有至少一个功能激活的话，就把nowactive这个变量设置为true，然后判断activetimer计时器并伸出剑刃，或者nowactive为false，则判断计时器并收回剑刃。</p>
+<p>至此我们搞定了维奥大剑的lua脚本，尽管还是很混乱，不得不说武器这里的脚本确实比较复杂，但是如果上手制作的话我觉得并不会太困难，至少可以试一试。</p>
+
+      
+    </div>
+    
+    
+    <div class="article-category">
+      
+      
+      
+        <b>Tags:</b>
+        <a class="article-tag-none-link" href="/tags/%E6%9C%AA%E5%88%86%E7%B1%BB/" rel="tag">未分类</a>
+      
+    </div>
+    
+    
+  </div>
+</article>
+
+  
+<nav id="article-nav" class="article-nav">
+  
+    <a href="/2019/03/01/Starbound-mod-%E6%AD%A6%E5%99%A8%E5%88%B6%E4%BD%9C%E6%95%99%E7%A8%8B%EF%BC%88%E4%B8%89%EF%BC%89/" id="article-nav-newer" class="article-nav-link-wrap newer">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Starbound mod 武器制作教程（三）
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/02/27/Starbound-mod-%E6%AD%A6%E5%99%A8%E5%88%B6%E4%BD%9C%E6%95%99%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/" id="article-nav-older" class="article-nav-link-wrap older">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Starbound mod 武器制作教程（一）
+        
+      </div>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+    </div>
+  </div>
+  
+
+
+
+
+
+
+
+</body>
+</html>

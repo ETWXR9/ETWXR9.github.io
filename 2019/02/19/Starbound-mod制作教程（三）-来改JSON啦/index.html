@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Starbound mod制作教程（三） 来改JSON啦 | etwxr9&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+  
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+  <div id="wrapper">
+    <header id="header">
+  <h1 id="title">
+    <a href="/">etwxr9&#39;s blog</a>
+  </h1>
+  <nav>
+    
+    
+      
+      <a class="nav-link" href="/">Home</a>
+    
+      
+        <span class="nav-spacer">×</span>
+      
+      <a class="nav-link" href="/archives">Archives</a>
+    
+    
+  </nav>
+</header>
+
+    <div id="content">
+      <article id="post-Starbound-mod制作教程（三）-来改JSON啦" class="article article-type-post" itemprop="blogPost" itemscope>
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 class="article-title" itemprop="headline name">
+      Starbound mod制作教程（三） 来改JSON啦
+    </h2>
+  
+
+
+        <div class="article-meta">
+          <time class="article-date" datetime="2019-02-18T16:00:56.000Z" itemprop="datePublished">二月 19, 2019, 12:00 凌晨</time>
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        <p>本次教程将开始尝试阅读一些有关projectile的JSON文件并通过搜索和查阅wiki来了解这些奇奇怪怪的属性都是什么意思。最后会以原版游戏中的一个物品为基础来创造一个新的物品!</p>
+<p>这个方向是我随机挑的，之前我也不懂，一边摸索一边写了</p>
+<a id="more"></a>
+<p>首先打开items/throwables/ 这个目录显而易见，是收录可以扔的物品的。</p>
+<p>这里解释下，item即以道具形式存在于背包或箱子栏位里的物品。比如你手拿着一块土，那么这个土的数据就在items/materials/之中，如果你把这个土放下去，变成方块，那么这个方块土就是tiles/materials/之中的土。同理，<strong>虽然物品名称相同但是显然以不同的形式存在的物品，受不同的游戏逻辑支配，其数据当然是不同的</strong>，因此，当我们制作一个物品的时候，经常需要去创建该物品多种形式下的数据，以支撑其完整的功能和玩法。</p>
+<p>回到正题，items/throwable/里面，可以看到第一个就是beachball.png和beachball.thrownitem，png图片显然就是beachball的物品图标，而后的.thrownitem则是一个JSON文件，记录着这个物品的属性。使用编辑器打开之后就能看到如下的内容。<strong>对格式不熟悉的话，请阅读学习</strong><a href="http://www.runoob.com/json/json-tutorial.html"><strong>菜鸟教程</strong></a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;itemName&quot; : &quot;beachball&quot;,</span><br><span class="line">  &quot;rarity&quot; : &quot;Common&quot;,</span><br><span class="line">  &quot;price&quot; : 500,</span><br><span class="line">  &quot;category&quot; : &quot;throwableItem&quot;,</span><br><span class="line">  &quot;inventoryIcon&quot; : &quot;beachball.png&quot;,</span><br><span class="line">  &quot;image&quot; : &quot;beachball.png&quot;,</span><br><span class="line">  &quot;shortdescription&quot; : &quot;Beachball&quot;,</span><br><span class="line">  &quot;description&quot; : &quot;It&#39;s an inflatable beachball.&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;ammoUsage&quot; : 1,</span><br><span class="line"></span><br><span class="line">  &quot;edgeTrigger&quot; : true,</span><br><span class="line">  &quot;windupTime&quot; : 0.0,</span><br><span class="line">  &quot;cooldown&quot; : 0.4,</span><br><span class="line"></span><br><span class="line">  &quot;projectileType&quot; : &quot;beachball&quot;,</span><br><span class="line">  &quot;projectileConfig&quot; : &#123;</span><br><span class="line">    &quot;speed&quot; : 35,</span><br><span class="line">    &quot;power&quot; : 0,</span><br><span class="line">    &quot;periodicActions&quot; : [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;time&quot; : 0,</span><br><span class="line">        &quot;repeat&quot; : false,</span><br><span class="line">        &quot;action&quot; : &quot;sound&quot;,</span><br><span class="line">        &quot;options&quot; : [ &quot;&#x2F;sfx&#x2F;projectiles&#x2F;throw_item_small.ogg&quot; ]</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下来我们一起看看这些都是在说啥，如果遇到问题，就谷歌，到屎大棒wiki去看。大多数都有相应的解释，如果找不到，就猜，可以通过名字含义，对照其他相似物品的属性，实在不行还可以修改然后上游戏测试。</p>
+<ul>
+<li>itemname rarity price shortdescription description category image inventoryIcon顾名思义，我想玩过游戏的应该都清楚这些含义。</li>
+<li>ammoUsage顾名思义，使用后消耗的物品数量。</li>
+<li>edgeTrigger：顾名思义其实不是很好猜，尤其是我用投掷物并不多，于是搜了搜，发现wiki上也没有，但是意外搜到了<a href="http://www.mcbbs.net/thread-262917-1-1.htm">mcbbs上的介绍</a>，于是知道了这个属性是撞击后触发action的属性。而且这个帖子对投掷物JSON的介绍相当全面，下面的属性也是参考这个帖子的</li>
+<li>windupTime：根据上面的介绍，是触发action的延迟时间。</li>
+<li>cooldown：顾名思义，扔一次的冷却时间。</li>
+<li>projectileType：关联projectile文件夹的对应文件。</li>
+<li>projectileConfig：speed飞行速度，power威力。</li>
+<li>periodicActions：根据内容可以认为是周期触发的行为，time是周期，repeat是是否重复，action是行为类型，options是行为参数。这里的意思显然是使用时立即播放这个声音，且只播放一次。</li>
+<li>不过我在wiki里找到了<a href="https://starbounder.org/Modding:JSON/Variables/Projectiles">projectile文件下periodicActions的属性解释</a>，尽管和thrownitem不是一类文件，但是我想同样的属性名大致应该是一个意思。总之应该没猜错啦</li>
+</ul>
+<p>有关thrownitem的阅读理解到此结束，每个thrownitem内的属性可能有所不同，但必备的一些值是肯定有的，如果感兴趣可以多看几个。</p>
+<p>到此其实就已经可以照猫画虎地在XSWL/items/throwables/下创建一个新的thrownitem文件和png文件，来作为新添加的投掷物道具。<br>不过别忘了投掷物道具在扔出后就是另一个东西了，尽管beachball在手上和扔出去的外观貌似没什么不同，但显然受不同的游戏逻辑支配，属于不同种类的游戏内容。这也是为何要在thrownitem文件里使用projectileType来指定这个道具对应的projectile文件。那么这个投掷物分类是在哪呢？搜索后可以发现在unpacked/projectiles/throwable/这个目录下。其中记录了每种投掷物以投出形式存在时的一些属性，为了给我们的mod设计新的投掷物，就显然也得设计投掷形式的属性吧，因此在动手制作之前，我们还需要研究一下这里面的东西。</p>
+<p>里面有3个文件，分别是beachball.frames beachball.png beachball.projectile，显然.projectile就是投掷物属性的JSON了，而frames则是对png图片进行划分的JSON，这个一会再说。先打开beachball.projectile可以看到如下内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;projectileName&quot; : &quot;beachball&quot;,</span><br><span class="line">  &quot;speed&quot; : 180,</span><br><span class="line">  &quot;bounces&quot; : -1,</span><br><span class="line">  &quot;timeToLive&quot; : 30,</span><br><span class="line">  &quot;physics&quot; : &quot;beachball&quot;,</span><br><span class="line">  &quot;image&quot; : &quot;beachball.png&quot;,</span><br><span class="line">  &quot;frameNumber&quot; : 1,</span><br><span class="line">  &quot;windupFrames&quot; : 1,</span><br><span class="line">  &quot;animationCycle&quot; : 0.3,</span><br><span class="line">  &quot;intangibleWindup&quot; : true,</span><br><span class="line">  </span><br><span class="line">  &quot;damageKind&quot; : &quot;snowball&quot;,</span><br><span class="line">  &quot;damageTeam&quot; : &#123; &quot;type&quot; : &quot;indiscriminate&quot; &#125;,</span><br><span class="line">  &quot;intangibleTime&quot; : 0.15,</span><br><span class="line">  &quot;clientEntityMode&quot; : &quot;ClientSlaveOnly&quot;,</span><br><span class="line">  &quot;actionOnReap&quot; : [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;action&quot; : &quot;item&quot;,</span><br><span class="line">      &quot;name&quot; : &quot;beachball&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  &quot;damagePoly&quot; : [ [-7.5, 0], [-5, -5], [0, -7.5], [5, -5], [7.5, 0], [5, 5], [0, 7.5], [-5, 5] ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>理解这个JSON就容易多了，因为在wiki上搜到了<a href="https://starbounder.org/Modding:JSON/Variables/Projectiles">projectile的解释</a>。各位有不懂的可以自己去看啦）这里我就解释下这几个</p>
+<ul>
+<li>intangibleTime 顾名思义，应该是生成后的无物理作用的时间。</li>
+<li>actionOnReap的action类型：这里的item应当是生成物品，下面的name是生成什么物品，那么实际效果我们也可以看到，beachball撞到东西后，立即生成了可拾取的beachball item。</li>
+</ul>
+<p>还有不懂的可以下面评论留言</p>
+<p>那么至此我们对于一个投掷物应该有的文件基本上都知道啦，我们可以挑一个物品为基础去修改出一个新的道具了。在这里我准备试着做一个<strong>硫酸手雷</strong>，扔出后将产生硫酸伤害，会这么想是因为这个爆炸类型的文件排在第一个）</p>
+<p>那么根据我们对同类物品的分析，应该知道创建一个新物品所需要的文件，我们首先创建item形式的手雷，可以以bomb作为基础去制作。那么我们复制items/throwables下的bomb两个文件到XSWL/items/throwables下，改名为acidBomb，后缀当然不变。然后打开acidBomb.thrownitem开始修改。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;itemName&quot; : &quot;acidBomb&quot;,</span><br><span class="line">  &quot;price&quot; : 50,</span><br><span class="line">  &quot;rarity&quot; : &quot;Common&quot;,</span><br><span class="line">  &quot;category&quot; : &quot;throwableItem&quot;,</span><br><span class="line">  &quot;inventoryIcon&quot; : &quot;acidBomb.png&quot;,</span><br><span class="line">  &quot;image&quot; : &quot;acidBomb.png&quot;,</span><br><span class="line">  &quot;shortdescription&quot; : &quot;Acid Bomb&quot;,</span><br><span class="line">  &quot;description&quot; : &quot;An acid bomb.&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;ammoUsage&quot; : 1,</span><br><span class="line"></span><br><span class="line">  &quot;edgeTrigger&quot; : true,</span><br><span class="line">  &quot;windupTime&quot; : 0.0,</span><br><span class="line">  &quot;cooldown&quot; : 0.4,</span><br><span class="line"></span><br><span class="line">  &quot;projectileType&quot; : &quot;acidBomb&quot;,</span><br><span class="line">  &quot;projectileConfig&quot; : &#123;</span><br><span class="line">    &quot;speed&quot; : 25,</span><br><span class="line">    &quot;power&quot; : 40,</span><br><span class="line">    &quot;periodicActions&quot; : [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;time&quot; : 0,</span><br><span class="line">        &quot;repeat&quot; : false,</span><br><span class="line">        &quot;action&quot; : &quot;sound&quot;,</span><br><span class="line">        &quot;options&quot; : [ &quot;&#x2F;sfx&#x2F;projectiles&#x2F;throw_item.ogg&quot; ]</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>修改相当简单，没啥好说的。接下来先不管图片，我们继续制作投掷物形式的projectile文件。创建目录XSWL/projectiles/throwable/acidBomb然后把Bomb对应的三个文件复制进去然后改名。打开acidBomb.projectile开始修改。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;projectileName&quot; : &quot;acidBomb&quot;,</span><br><span class="line">  &quot;physics&quot; : &quot;grenade&quot;,</span><br><span class="line">  &quot;bounces&quot; : -1,</span><br><span class="line">  &quot;timeToLive&quot; : 5,</span><br><span class="line">  &quot;image&quot; : &quot;acidBomb.png&quot;,</span><br><span class="line">  &quot;animationCycle&quot; : 5,</span><br><span class="line">  &quot;lightColor&quot; : [105, 64, 0],</span><br><span class="line">  &quot;frameNumber&quot; : 7,</span><br><span class="line">  &quot;actionOnReap&quot; : [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;action&quot; : &quot;projectile&quot;,</span><br><span class="line">      &quot;type&quot;:&quot;acidexplosion&quot;,</span><br><span class="line">      &quot;fuzzAngle&quot; : 0,</span><br><span class="line">      &quot;angleAdjust&quot; : 0</span><br><span class="line">    &#125;</span><br><span class="line">  ],</span><br><span class="line">  &quot;power&quot; : 0,</span><br><span class="line">  &quot;damageType&quot; : &quot;NoDamage&quot;,</span><br><span class="line">  &quot;damageKind&quot; : &quot;default&quot;,</span><br><span class="line">  &quot;damagePoly&quot; : [ [-6, 0], [-4, -4], [0, -6], [4, -4], [6, 0], [4, 4], [0, 6], [-4, 4] ],</span><br><span class="line">  &quot;emitters&quot; : [ &quot;sparks&quot; ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>主要修改了actiononreap，我让它产生一个acidexplosion。<br>还修改了power来使其不破坏地形。</p>
+<p>ok！现在先不修改外观，我们看下游戏中是否实际有效，保存好后确保这东西都在mods/XSWL里并且目录正确，打开游戏新建人物跳过开头打开admin然后spawnitem acidBomb 100来看看。</p>
+<p>于是发现这炸弹的确可以使用，效果就是碰到敌人或者到时间后产生一个acidexplosion，不过这个爆炸比我想得要小。。而且伤害很低，另外也没有附加acid状态。<br>所以很不实用，我设想的acidbomb应当是爆炸后会产生较大范围的实际伤害，并对范围内的敌人造成acid状态，这样才比较强力，我们会在下一个教程逐步添加这些效果。</p>
+
+      
+    </div>
+    
+    
+    <div class="article-category">
+      
+      
+      
+        <b>Tags:</b>
+        <a class="article-tag-none-link" href="/tags/Starbound-mod%E5%88%B6%E4%BD%9C%E6%95%99%E7%A8%8B/" rel="tag">Starbound mod制作教程</a>
+      
+    </div>
+    
+    
+  </div>
+</article>
+
+  
+<nav id="article-nav" class="article-nav">
+  
+    <a href="/2019/02/20/Starbound-mod%E5%88%B6%E4%BD%9C%E6%95%99%E7%A8%8B%EF%BC%88%E5%9B%9B%EF%BC%89-%E6%9D%A5%E5%86%99lua%E5%95%A6%EF%BC%81/" id="article-nav-newer" class="article-nav-link-wrap newer">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Starbound mod制作教程（四） 来写lua啦！
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/02/18/Starbound-mod%E5%88%B6%E4%BD%9C%E6%95%99%E7%A8%8B%EF%BC%88%E4%BA%8C%EF%BC%89-mod%E9%95%BF%E4%BB%80%E4%B9%88%E6%A0%B7/" id="article-nav-older" class="article-nav-link-wrap older">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Starbound mod制作教程（二） mod长什么样
+        
+      </div>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+    </div>
+  </div>
+  
+
+
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Starbound mod制作教程（二） mod长什么样 | etwxr9&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+  
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+  <div id="wrapper">
+    <header id="header">
+  <h1 id="title">
+    <a href="/">etwxr9&#39;s blog</a>
+  </h1>
+  <nav>
+    
+    
+      
+      <a class="nav-link" href="/">Home</a>
+    
+      
+        <span class="nav-spacer">×</span>
+      
+      <a class="nav-link" href="/archives">Archives</a>
+    
+    
+  </nav>
+</header>
+
+    <div id="content">
+      <article id="post-Starbound-mod制作教程（二）-mod长什么样" class="article article-type-post" itemprop="blogPost" itemscope>
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 class="article-title" itemprop="headline name">
+      Starbound mod制作教程（二） mod长什么样
+    </h2>
+  
+
+
+        <div class="article-meta">
+          <time class="article-date" datetime="2019-02-18T11:37:29.000Z" itemprop="datePublished">二月 18, 2019, 7:37 晚上</time>
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        <p>当第一部分准备工作完成后，就可以开始制作第一个mod了，无论打算制作怎样的mod，最开始遇到的问题显然是：mod的文件必须是什么样的？放在哪里才能生效？</p>
+<a id="more"></a>
+<p>屎大棒的目录下，有个叫mods的文件夹，如果你使用我提供的教程进行解包，你应该已经找到那个文件夹了。_（这里有一点需要注意，那就是steam创意工坊订阅的mod并不在这里，而是在steam目录下的创意工坊文件夹里。）_屎大棒会从这个文件夹里读取mod载入游戏之中，无论是打包成pak的mod，还是文件夹形式的mod，都是一样的。为了方便修改，开发时我们当然不会每次都打包mod。<br>mod的结构遵循assets里unpacked文件夹的形式，因为mod基本上都是对这些文件进行增加和修改，所以目录结构也是对应的。<br>举个例子，如果我们的mod功能十分简单，就是去替换游戏中的一个bgm，即<strong>存放在music文件夹中的某个音乐文件</strong>，如assets/_unpacked/music/jupiter.ogg，想必各位肯定十分熟悉这首优美的背景音乐。为了让游戏在加载的时候同时加载我们的mod来替换这个音乐，我们需要<br>（1）准备一个jupiter.ogg文件，也就是用来替换原版jupiter.ogg。如果文件名起的不一样，那么显然游戏也不知道你要替换的是这个文件）<br>（2）在starbound的mods文件夹下创建一个文件夹，起名随意，比如XSWL，这就是我们的XSWL mod的文件夹，接下来将我们要替换的文件以<strong>和assets文件夹中相同的位置</strong>进行放置，在这里，就是mods/XSWL/music/jupiter.ogg<br>（3）最后，为了让屎大棒知道这是一个mod，我们需要在XSWL文件夹下创建一个空文档，并将其命名为_metadata<strong>（无后缀名）</strong>在这个文件内编辑一个JSON表来说明该mod的一些必要属性，你可以参照其他mod的写法，不过assets之中就有一个可以参照，它的内容是这样的。  </p>
+<p>{ “author” : “Chucklefish”, “name” : “base”, “priority” : -9999, “friendlyName” : “Base Game Assets”}</p>
+<p>如果把assets这个文件夹看作一个大mod，这个文件就是说<br>它的author是呵呵鱼<br>mod的name叫base<br>优先级为-9999，说白了就是只要其他mod的优先级不设置成更低的数字，那么发生文件冲突，base的文件会最先被覆盖掉，这也是为何我们可以用自己的mod中的音乐文件来覆盖asstes中的音乐文件。<br>friendlyName，即展示在游戏中的mod名称，这里也可以填写中文，总之大家在游戏里看到你的mod名字就叫这个。</p>
+<p>你可以直接将这个文件复制到你的XSWL（好了我知道这名字太sb了你也可以用其他名字但是既然我们在做sb的mod为何不把mod名字写的sb一点呢）文件夹下，然后修改其作者和名字等属性（这个属性可以没有），这样屎大棒在加载的时候就知道你这个是个mod啦。</p>
+<p>有关_metadata的内容，<a href="https://starbounder.org/Modding:Metadata_file">wiki上给了很全面的属性列表</a>，你没有必要全写上，总之看自己的想法了。这里再提供一下FU的_metadata文件作为参考。</p>
+<p><img src="https://s2.ax1x.com/2019/02/18/kcmKbQ.md.png"></p>
+<p>本次教程就是为了熟悉mod的结构和原理，所以并没有做成什么实质性的mod，如果你的确把这个音乐替换mod做出来了，可以尝试运行一下，并在mod列表里查看是否加载成功。<br>下一次教程将开始制作一个能实际增加或修改游戏内物品和功能的mod。</p>
+
+      
+    </div>
+    
+    
+    <div class="article-category">
+      
+      
+      
+        <b>Tags:</b>
+        <a class="article-tag-none-link" href="/tags/Starbound-mod%E5%88%B6%E4%BD%9C%E6%95%99%E7%A8%8B/" rel="tag">Starbound mod制作教程</a>
+      
+    </div>
+    
+    
+  </div>
+</article>
+
+  
+<nav id="article-nav" class="article-nav">
+  
+    <a href="/2019/02/19/Starbound-mod%E5%88%B6%E4%BD%9C%E6%95%99%E7%A8%8B%EF%BC%88%E4%B8%89%EF%BC%89-%E6%9D%A5%E6%94%B9JSON%E5%95%A6/" id="article-nav-newer" class="article-nav-link-wrap newer">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Starbound mod制作教程（三） 来改JSON啦
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/02/18/Starbound-mod%E5%88%B6%E4%BD%9C%E6%95%99%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89-%E7%AE%80%E4%BB%8B%E5%92%8C%E5%87%86%E5%A4%87/" id="article-nav-older" class="article-nav-link-wrap older">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Starbound mod制作教程（一） 简介和准备
+        
+      </div>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+    </div>
+  </div>
+  
+
+
+
+
+
+
+
+</body>
+</html>

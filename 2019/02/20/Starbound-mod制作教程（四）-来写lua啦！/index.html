@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Starbound mod制作教程（四） 来写lua啦！ | etwxr9&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+  
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+  <div id="wrapper">
+    <header id="header">
+  <h1 id="title">
+    <a href="/">etwxr9&#39;s blog</a>
+  </h1>
+  <nav>
+    
+    
+      
+      <a class="nav-link" href="/">Home</a>
+    
+      
+        <span class="nav-spacer">×</span>
+      
+      <a class="nav-link" href="/archives">Archives</a>
+    
+    
+  </nav>
+</header>
+
+    <div id="content">
+      <article id="post-Starbound-mod制作教程（四）-来写lua啦！" class="article article-type-post" itemprop="blogPost" itemscope>
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 class="article-title" itemprop="headline name">
+      Starbound mod制作教程（四） 来写lua啦！
+    </h2>
+  
+
+
+        <div class="article-meta">
+          <time class="article-date" datetime="2019-02-19T16:28:07.000Z" itemprop="datePublished">二月 20, 2019, 12:28 凌晨</time>
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        <p>你猜怎么着？原版居然没有acid状态，我惊了！</p>
+<p>那我们写一个吧。。</p>
+<a id="more"></a>
+<p>按名称可以找到状态都放在了stats/effects里面，我们找一个大概差不多的看看，比如foodposion，里面三个文件，.animation .statuseffect .lua，前两个都是JSON，后面的是lua文件，lua是控制物品自定义逻辑的脚本。</p>
+<p>惯例不管animation，打开statuseffect看看里面。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;name&quot; : &quot;foodpoison&quot;,</span><br><span class="line">  &quot;blockingStat&quot; : &quot;poisonStatusImmunity&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;effectConfig&quot; : &#123;&#125;,</span><br><span class="line">  &quot;defaultDuration&quot; : 60,</span><br><span class="line"></span><br><span class="line">  &quot;scripts&quot; : [</span><br><span class="line">    &quot;foodpoison.lua&quot;</span><br><span class="line">  ],</span><br><span class="line"></span><br><span class="line">  &quot;animationConfig&quot; : &quot;foodpoison.animation&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;label&quot; : &quot;Food Poisoning&quot;,</span><br><span class="line">  &quot;icon&quot; : &quot;&#x2F;interface&#x2F;statuses&#x2F;foodpoison.png&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>貌似没什么难理解的，不懂的下面评论吧。<br>scripts一项指向了foodpoison.lua，那么该状态会使用该lua脚本的函数。我们打开看看。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">function init()</span><br><span class="line">  animator.setParticleEmitterOffsetRegion(&quot;drips&quot;, mcontroller.boundBox())</span><br><span class="line">  animator.setParticleEmitterActive(&quot;drips&quot;, true)</span><br><span class="line"></span><br><span class="line">  script.setUpdateDelta(5)</span><br><span class="line"></span><br><span class="line">  self.tickDamagePercentage &#x3D; 0.010</span><br><span class="line">  self.tickTime &#x3D; 1.0</span><br><span class="line">  self.tickTimer &#x3D; self.tickTime</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">function update(dt)</span><br><span class="line">  self.tickTimer &#x3D; self.tickTimer - dt</span><br><span class="line">  if self.tickTimer &lt;&#x3D; 0 then</span><br><span class="line">    self.tickTimer &#x3D; self.tickTime</span><br><span class="line">    status.applySelfDamageRequest(&#123;</span><br><span class="line">        damageType &#x3D; &quot;IgnoresDef&quot;,</span><br><span class="line">        damage &#x3D; math.floor(status.resourceMax(&quot;health&quot;) * self.tickDamagePercentage) + 1,</span><br><span class="line">        damageSourceKind &#x3D; &quot;poison&quot;,</span><br><span class="line">        sourceEntityId &#x3D; entity.id()</span><br><span class="line">      &#125;)</span><br><span class="line">  end</span><br><span class="line"></span><br><span class="line">  effect.setParentDirectives(string.format(&quot;fade&#x3D;00AA00&#x3D;%.1f&quot;, self.tickTimer * 0.4))</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">function uninit()</span><br><span class="line"></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<p>基本语法请参阅<a href="http://www.runoob.com/lua/lua-tutorial.html">菜鸟教程</a>，我也是半吊子，不会事无巨细地说明lua语法，只做简单解释。</p>
+<ul>
+<li>init函数是该物品/道具/状态等等对象产生的时候调用的函数，你可以在屎大棒的各种lua脚本中看到这个函数名。uninit也是。这些函数具体参阅<a href="https://starbounder.org/Modding:Lua/Hooks/Quest">wiki的lua/Hooks/Quest页面</a></li>
+<li>animator是一个公有模块，请参阅wiki或者starbound/doc/lua里的md文件说明。</li>
+<li>script也是公有模块，其doc里的文件是updatablescript.md</li>
+<li>self指的是自己。</li>
+<li>update（dt）函数是每dt帧调用一次的函数。dt可以通过之前出现的setUpdateDelta来设置，单位是帧。这里面写的逻辑就是<strong>计时变量tickTimer初始等于tickTime</strong>，每次调用<strong>都会减去dt</strong>，然后等<strong>降到零</strong>的时候就执行一次后面的逻辑。</li>
+<li>status是公有模块，参阅statuscontroller.md</li>
+<li>effect也是公有模块，参阅statuseffect.md</li>
+<li>注意到status.applySelfDamageRequest的参数类型是个<strong>DamageRequest</strong>类型，遇到这种不知道里面应该写点啥的类型，参阅<a href="https://starbounder.org/Modding:Lua/Starbound_Datatypes">wiki的datatype页面</a></li>
+</ul>
+<p>这个lua介绍到这里，不懂的评论区问。</p>
+<p>ok那我们来做一个差不多的好了，也就是每次受伤害一定百分比。因此可以直接复制来用。那就复制整个foodpoison的文件去XSWL/stats/effects/acid，先改名为acid。然后打开acid.statuseffect开始修改。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;name&quot; : &quot;acid&quot;,</span><br><span class="line">  &quot;blockingStat&quot; : &quot;poisonStatusImmunity&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;effectConfig&quot; : &#123;&#125;,</span><br><span class="line">  &quot;defaultDuration&quot; : 5,</span><br><span class="line"></span><br><span class="line">  &quot;scripts&quot; : [</span><br><span class="line">    &quot;acid.lua&quot;</span><br><span class="line">  ],</span><br><span class="line"></span><br><span class="line">  &quot;animationConfig&quot; : &quot;acid.animation&quot;,</span><br><span class="line"></span><br><span class="line">  &quot;label&quot; : &quot;Food Poisoning&quot;,</span><br><span class="line">  &quot;icon&quot; : &quot;&#x2F;interface&#x2F;statuses&#x2F;acid.png&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>懒得再搞一个对应免疫了，直接用poison的免疫好了。然后就是注意到还有个icon要做，一会别忘了。。</p>
+<p>接下来改lua</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">function init()</span><br><span class="line">  animator.setParticleEmitterOffsetRegion(&quot;drips&quot;, mcontroller.boundBox())</span><br><span class="line">  animator.setParticleEmitterActive(&quot;drips&quot;, true)</span><br><span class="line"></span><br><span class="line">  script.setUpdateDelta(5)</span><br><span class="line"></span><br><span class="line">  self.tickDamagePercentage &#x3D; 0.050</span><br><span class="line">  self.tickTime &#x3D; 1</span><br><span class="line">  self.tickTimer &#x3D; self.tickTime</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">function update(dt)</span><br><span class="line">  self.tickTimer &#x3D; self.tickTimer - dt</span><br><span class="line">  if self.tickTimer &lt;&#x3D; 0 then</span><br><span class="line">    self.tickTimer &#x3D; self.tickTime</span><br><span class="line">    status.applySelfDamageRequest(&#123;</span><br><span class="line">        damageType &#x3D; &quot;IgnoresDef&quot;,</span><br><span class="line">        damage &#x3D; math.floor(status.resourceMax(&quot;health&quot;) * self.tickDamagePercentage) + 1,</span><br><span class="line">        damageSourceKind &#x3D; &quot;acid&quot;,</span><br><span class="line">        sourceEntityId &#x3D; entity.id()</span><br><span class="line">      &#125;)</span><br><span class="line">  end</span><br><span class="line"></span><br><span class="line">  effect.setParentDirectives(string.format(&quot;fade&#x3D;d3ff00&#x3D;%.1f&quot;, self.tickTimer * 0.4))</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">function uninit()</span><br><span class="line"></span><br><span class="line">end</span><br></pre></td></tr></table></figure>
+
+<p>也没大改，修改了持续时间ticktime，伤害百分比，伤害类型acid，effect颜色为d3ff00，即一种偏黄的颜色。</p>
+<p>其实到这里基本上可以用了，不过我们再看看animation文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;particleEmitters&quot; : &#123;</span><br><span class="line">    &quot;drips&quot; : &#123;</span><br><span class="line">      &quot;enabled&quot; : true,</span><br><span class="line">      &quot;emissionRate&quot; : 1.0,</span><br><span class="line">      &quot;particles&quot; : [</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;particle&quot; : &#123;</span><br><span class="line">            &quot;type&quot; : &quot;ember&quot;,</span><br><span class="line">            &quot;size&quot; : 1.0,</span><br><span class="line">            &quot;color&quot; : [30, 250, 30, 120],</span><br><span class="line">            &quot;fade&quot; : 0.9,</span><br><span class="line">            &quot;destructionAction&quot; : &quot;shrink&quot;,</span><br><span class="line">            &quot;destructionTime&quot; : 0.8,</span><br><span class="line">            &quot;position&quot; : [0.0, 0.0],</span><br><span class="line">            &quot;offsetRegion&quot; : [0, 0, 0, 0],</span><br><span class="line">            &quot;initialVelocity&quot; : [0, -1.0],</span><br><span class="line">            &quot;finalVelocity&quot; : [0, -6],</span><br><span class="line">            &quot;approach&quot; : [0, 10],</span><br><span class="line">            &quot;timeToLive&quot; : 0.6,</span><br><span class="line">            &quot;variance&quot; : &#123;</span><br><span class="line">              &quot;initialVelocity&quot; : [0.2, 0],</span><br><span class="line">              &quot;size&quot; : 0.5</span><br><span class="line">            &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个JSON看起来很麻烦，我们先梳理下结构吧<br>particleEmitters下只有一个键值对，名字为drips。<br>drips下有三个键值对，enable emissionRate particles。<br>particles的值是个数组，不过里面只有一个对象。<br>这个对象里面有好多键值对，从type一直到variance，<br>其中variance的值还是个对象，里面有两个，initialVelocity和size。</p>
+<p>想要更直观地看到JSON结构，可以去<a href="https://c.runoob.com/front-end/53">菜鸟教程在线JSON格式化工具</a>里看，将其中的结构一个一个展开来看，应该更好理解。</p>
+<p>那么不多解释啦，这里就说下这个type:ember，指的是particle目录下的粒子效果文件，其实ember这个就是个像素块。。剩下的顾名思义啦，不懂的评论。</p>
+<p>我们修改一下。。等等貌似没啥好改的，这个动画效果也就是一堆像素块往下掉，然后有个初末y速度，同时在x上有个随机速度，作为acid的效果挺ok的。那么顶多改改颜色，和上面那个一样，这次换成RGB形式，是 [211, 255, 0, 120] 。保存。</p>
+<p>接下来要做的就是制作一下炸弹爆炸的动画，并附加acid状态。</p>
+
+      
+    </div>
+    
+    
+    <div class="article-category">
+      
+      
+      
+        <b>Tags:</b>
+        <a class="article-tag-none-link" href="/tags/Starbound-mod%E5%88%B6%E4%BD%9C%E6%95%99%E7%A8%8B/" rel="tag">Starbound mod制作教程</a>
+      
+    </div>
+    
+    
+  </div>
+</article>
+
+  
+<nav id="article-nav" class="article-nav">
+  
+    <a href="/2019/02/20/Starbound-mod%E5%88%B6%E4%BD%9C%E6%95%99%E7%A8%8B%EF%BC%88%E4%BA%94%EF%BC%89-%E6%9D%A5%E7%94%BB%E7%94%BB%E5%95%A6/" id="article-nav-newer" class="article-nav-link-wrap newer">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Starbound mod制作教程（五） 来画画啦
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/02/19/Starbound-mod%E5%88%B6%E4%BD%9C%E6%95%99%E7%A8%8B%EF%BC%88%E4%B8%89%EF%BC%89-%E6%9D%A5%E6%94%B9JSON%E5%95%A6/" id="article-nav-older" class="article-nav-link-wrap older">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Starbound mod制作教程（三） 来改JSON啦
+        
+      </div>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+    </div>
+  </div>
+  
+
+
+
+
+
+
+
+</body>
+</html>
