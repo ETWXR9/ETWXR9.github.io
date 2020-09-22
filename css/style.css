@@ -36,7 +36,7 @@ html {
  
 body {
   background: var(--bg-color);
-  background-image: url("/images/45-degree-fabric-dark.png");
+  background-image: url("45-degree-fabric-dark.png");
   color: var(--text-color);
   font-family: var(--body-stack);
   margin: auto;
