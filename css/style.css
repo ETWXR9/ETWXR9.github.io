@@ -19,7 +19,7 @@
   --bg-color: #fffbe7;
   --code-bg-color: #f4f4f4;
   --text-color: #212121;
-  --secondary-color: #808080;
+  --secondary-color: #363636;
   --tertiary-color: #b0b0b0;
   --link-color: #b5c8cf;
   --link-hover-color: #618794;
@@ -36,6 +36,7 @@ html {
  
 body {
   background: var(--bg-color);
+  background-image:url("45-degree-fabric-dark.png");
   color: var(--text-color);
   font-family: var(--body-stack);
   margin: auto;
