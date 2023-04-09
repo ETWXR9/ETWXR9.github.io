@@ -40,6 +40,45 @@
     <div id="content">
       
   
+    <article id="post-取得contenteditable中光标的坐标位置" class="article article-type-post" itemprop="blogPost" itemscope>
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 class="article-title" itemprop="name">
+      <a href="/2023/04/09/%E5%8F%96%E5%BE%97contenteditable%E4%B8%AD%E5%85%89%E6%A0%87%E7%9A%84%E5%9D%90%E6%A0%87%E4%BD%8D%E7%BD%AE/">取得contenteditable中光标的坐标位置</a>
+      
+    </h2>
+  
+
+
+        <div class="article-meta">
+          <time class="article-date" datetime="2023-04-09T00:11:33.000Z" itemprop="datePublished">四月 9, 2023, 8:11 早上</time>
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        <p>开发安科编辑器时，需要在contenteditable中临时生成一个“ROLLDICE”输入框，并把输入框准确放在用户输入光标的位置。</p>
+<p>常见的做法直接使用getRangeAt(0).getBoundingClientRect()，但当光标位于行首时，返回值将为0。因此在这种情况下需要临时添加一个span并用于计算出正确位置。</p>
+<p>但如果光标处于文字之间时，添加span会导致光标移位，因此必须只在光标处于行首时使用这种方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//get the position of the cursor</span></span><br><span class="line"><span class="keyword">let</span> selection = <span class="built_in">window</span>.getSelection();</span><br><span class="line"><span class="keyword">let</span> range = selection.getRangeAt(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">let</span> rect = range.getBoundingClientRect();</span><br><span class="line"><span class="keyword">let</span> topPosition = rect.top;</span><br><span class="line"><span class="keyword">let</span> leftPosition = rect.left;</span><br><span class="line"><span class="comment">//if the cursor is at the beginning of a line, the position is 0</span></span><br><span class="line"><span class="keyword">if</span> (topPosition === <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="comment">//create a hidden node to get the correct position of the cursor</span></span><br><span class="line">    <span class="built_in">document</span>.execCommand(<span class="string">&#x27;insertHTML&#x27;</span>, <span class="literal">false</span>, <span class="string">&#x27;&lt;span id=&quot;hiddenSpan&quot;&gt;&lt;/span&gt;&#x27;</span>);</span><br><span class="line">    <span class="keyword">let</span> hiddenNode = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;hiddenSpan&#x27;</span>);</span><br><span class="line">    <span class="keyword">let</span> rect = hiddenNode.getBoundingClientRect();</span><br><span class="line">    topPosition = rect.top;</span><br><span class="line">    leftPosition = rect.left;</span><br><span class="line">    hiddenNode.parentNode.removeChild(hiddenNode);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// create the dicediv</span></span><br><span class="line"><span class="comment">// dicediv position must be absolute</span></span><br><span class="line"><span class="keyword">let</span> dicediv = <span class="built_in">document</span>.createElement(<span class="string">&#x27;div&#x27;</span>);</span><br><span class="line">dicediv.className = <span class="string">&quot;dice_div&quot;</span>;</span><br><span class="line">dicediv.style.left = leftPosition + <span class="string">&quot;px&quot;</span>;</span><br><span class="line">dicediv.style.top = topPosition + <span class="string">&quot;px&quot;</span>;</span><br><span class="line">editDiv.appendChild(dicediv);</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+  </div>
+</article>
+
+
+
+  
     <article id="post-Stranding——我们的双腿并非轮子" class="article article-type-post" itemprop="blogPost" itemscope>
   <div class="article-inner">
     
@@ -191,45 +230,6 @@
     
       <div class="article-more-link">
         <a href="/2020/04/22/HeatSignature%E2%80%94%E2%80%94%E8%AE%BA%E6%8A%8A%E8%87%AA%E5%B7%B1%E5%BC%84%E5%87%BA%E9%A3%9E%E8%88%B9%E7%9A%84100%E7%A7%8D%E6%96%B9%E6%B3%95/#more">read more</a>
-      </div>
-    
-    
-    
-  </div>
-</article>
-
-
-
-  
-    <article id="post-Hytale官方宣传简介-系统与机制" class="article article-type-post" itemprop="blogPost" itemscope>
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h2 class="article-title" itemprop="name">
-      <a href="/2020/04/03/Hytale%E5%AE%98%E6%96%B9%E5%AE%A3%E4%BC%A0%E7%AE%80%E4%BB%8B-%E7%B3%BB%E7%BB%9F%E4%B8%8E%E6%9C%BA%E5%88%B6/">Hytale官方宣传简介-系统与机制</a>
-      
-    </h2>
-  
-
-
-        <div class="article-meta">
-          <time class="article-date" datetime="2020-04-03T13:58:41.000Z" itemprop="datePublished">四月 3, 2020, 9:58 晚上</time>
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-      
-        <p>Hytale是Hypixel团队多年来一直在开发的一个游戏，基于其运营服务器的理念，试图打造一个对社区和modder友好的沙盒游戏，后来还拿到了拳头的投资。直到前年，hypixel团队开始不断放出有关Hytale的宣传介绍，在此我搬运一些对游戏的介绍中个人认为比较重要的部分。 我将对博客中给出的有关游戏的内容进行简评，着重关注游戏的底层潜力，要知道作为一个定位为社区UGC的游戏，其承载玩家自定义的能力至关重要，而这也是Hytale面对MC必须展现出来的实力。<br>应当注意的是HYTALE仍然远未达到完整，因此任何截图展现的内容都可能被修改，而不管官方如何对待他们放出来的内容，我们至少都能从中看到一些官方对游戏的态度，以及一些比较准确稳定的信息。</p>
-      
-    </div>
-    
-      <div class="article-more-link">
-        <a href="/2020/04/03/Hytale%E5%AE%98%E6%96%B9%E5%AE%A3%E4%BC%A0%E7%AE%80%E4%BB%8B-%E7%B3%BB%E7%BB%9F%E4%B8%8E%E6%9C%BA%E5%88%B6/#more">read more</a>
       </div>
     
     

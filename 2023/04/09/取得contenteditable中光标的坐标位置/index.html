@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>取得contenteditable中光标的坐标位置 | etwxr9&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css?v=1.1;.css">
+
+  
+    
+<link rel="stylesheet" href="/css/highlight.css">
+
+  
+<meta name="generator" content="Hexo 5.2.0"></head>
+<body>
+  <div id="wrapper">
+    <header id="header">
+  <h1 id="title">
+    <a href="/">etwxr9&#39;s blog</a>
+  </h1>
+  <nav>
+    
+    
+      
+      <a class="nav-link" href="/">Home</a>
+    
+      
+        <span class="nav-spacer">×</span>
+      
+      <a class="nav-link" href="/archives">Archives</a>
+    
+    
+  </nav>
+</header>
+
+    <div id="content">
+      <article id="post-取得contenteditable中光标的坐标位置" class="article article-type-post" itemprop="blogPost" itemscope>
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h2 class="article-title" itemprop="headline name">
+      取得contenteditable中光标的坐标位置
+    </h2>
+  
+
+
+        <div class="article-meta">
+          <time class="article-date" datetime="2023-04-09T00:11:33.000Z" itemprop="datePublished">四月 9, 2023, 8:11 早上</time>
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        <p>开发安科编辑器时，需要在contenteditable中临时生成一个“ROLLDICE”输入框，并把输入框准确放在用户输入光标的位置。</p>
+<p>常见的做法直接使用getRangeAt(0).getBoundingClientRect()，但当光标位于行首时，返回值将为0。因此在这种情况下需要临时添加一个span并用于计算出正确位置。</p>
+<p>但如果光标处于文字之间时，添加span会导致光标移位，因此必须只在光标处于行首时使用这种方法。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//get the position of the cursor</span></span><br><span class="line"><span class="keyword">let</span> selection = <span class="built_in">window</span>.getSelection();</span><br><span class="line"><span class="keyword">let</span> range = selection.getRangeAt(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">let</span> rect = range.getBoundingClientRect();</span><br><span class="line"><span class="keyword">let</span> topPosition = rect.top;</span><br><span class="line"><span class="keyword">let</span> leftPosition = rect.left;</span><br><span class="line"><span class="comment">//if the cursor is at the beginning of a line, the position is 0</span></span><br><span class="line"><span class="keyword">if</span> (topPosition === <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="comment">//create a hidden node to get the correct position of the cursor</span></span><br><span class="line">    <span class="built_in">document</span>.execCommand(<span class="string">&#x27;insertHTML&#x27;</span>, <span class="literal">false</span>, <span class="string">&#x27;&lt;span id=&quot;hiddenSpan&quot;&gt;&lt;/span&gt;&#x27;</span>);</span><br><span class="line">    <span class="keyword">let</span> hiddenNode = <span class="built_in">document</span>.getElementById(<span class="string">&#x27;hiddenSpan&#x27;</span>);</span><br><span class="line">    <span class="keyword">let</span> rect = hiddenNode.getBoundingClientRect();</span><br><span class="line">    topPosition = rect.top;</span><br><span class="line">    leftPosition = rect.left;</span><br><span class="line">    hiddenNode.parentNode.removeChild(hiddenNode);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// create the dicediv</span></span><br><span class="line"><span class="comment">// dicediv position must be absolute</span></span><br><span class="line"><span class="keyword">let</span> dicediv = <span class="built_in">document</span>.createElement(<span class="string">&#x27;div&#x27;</span>);</span><br><span class="line">dicediv.className = <span class="string">&quot;dice_div&quot;</span>;</span><br><span class="line">dicediv.style.left = leftPosition + <span class="string">&quot;px&quot;</span>;</span><br><span class="line">dicediv.style.top = topPosition + <span class="string">&quot;px&quot;</span>;</span><br><span class="line">editDiv.appendChild(dicediv);</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+  </div>
+</article>
+
+  
+<nav id="article-nav" class="article-nav">
+  
+    <span id="article-nav-newer" class="article-nav-link-wrap newer"></span>
+  
+  
+    <a href="/2020/12/30/Stranding%E2%80%94%E2%80%94%E6%88%91%E4%BB%AC%E7%9A%84%E5%8F%8C%E8%85%BF%E5%B9%B6%E9%9D%9E%E8%BD%AE%E5%AD%90/" id="article-nav-older" class="article-nav-link-wrap older">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">
+        
+          Death Stranding——我们的双腿并非轮子
+        
+      </div>
+    </a>
+  
+</nav>
+
+
+
+
+
+
+    </div>
+  </div>
+  
+
+
+
+
+
+
+
+</body>
+</html>
